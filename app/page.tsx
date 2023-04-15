@@ -13,6 +13,8 @@ const metaContext = createContext({
   setDocName:(docName:string)=>{},
   assignedFor:"",
   setAssignedFor:(assignedFor:string)=>{},
+  printPrep:false,
+  setPrintPrep:(printPrep:boolean)=>{}
 
 });
 
@@ -32,12 +34,13 @@ export default function Page() {
     };
   },[]);
   
-  const [docName,setDocName]=useState<string>("")
-  const [assignedFor,setAssignedFor]=useState<string>("")
+  const [docName,setDocName]=useState<string>("");
+  const [assignedFor,setAssignedFor]=useState<string>("");
 
-  const [creatorName,setCreatorName]=useState<string>("")
-  const [creatorID,setCreatorID]=useState<string>("")
+  const [creatorName,setCreatorName]=useState<string>("");
+  const [creatorID,setCreatorID]=useState<string>("");
 
+  const [printPrep,setPrintPrep]=useState<boolean>(false);
   
   const value = {
     creatorID:creatorID,
@@ -47,7 +50,9 @@ export default function Page() {
     docName:docName,
     setDocName:setDocName,
     assignedFor:assignedFor,
-    setAssignedFor:setAssignedFor
+    setAssignedFor:setAssignedFor,
+    printPrep:printPrep,
+    setPrintPrep:setPrintPrep
   };
 
 
@@ -57,12 +62,12 @@ export default function Page() {
     
   
 
-    <main>
+    <main className="data-[colorDefault=true]:bg-[#ffe4c4]" data-colorDefault={printPrep}>
       <metaContext.Provider value={value}>
-      <PageComponent/>
-      <PageComponent/>
+        <PageComponent/>
+        <PageComponent/>
+        <OptionMenu/>
      </metaContext.Provider>
-
     </main>
     
 
@@ -81,10 +86,11 @@ const sourceRef=(link:string, number:number)=>(
 
 const PageComponent = () => {
 
+  const {printPrep}=useContext(metaContext);
 
   return(
 
-  <div className="A4">
+  <div className="A4 data-[printCheck]" data-printCheck={printPrep}>
 
     <input className="h1" placeholder="Page Heading">
     </input>
@@ -219,12 +225,24 @@ const PageComponent = () => {
     )
   }
 
-  const PrintPrepare=()=>{
-
+  const OptionMenu=()=>{
+    const {printPrep,setPrintPrep}=useContext(metaContext);
+    
     return(
-      <button>
+      <form className="h-fit grid-cols-2 grid A4 text-blue-500 data-[printCheck]" data-printCheck={printPrep}>
+        <label>
+          Print Show
+          <input id="print" type="checkbox" onChange={()=>{setPrintPrep(!printPrep);}}/>
+        </label>
+        {printPrep+""}
+        <span>h</span>
+        <span>h</span>
+        <span>h</span>
+        <span>h</span>
+        <span>h</span>
 
-      </button>
+      </form>
+
     )
   }
   

@@ -3,6 +3,11 @@
 body{
   margin: 0;
   padding: 0;
+}
+
+main{
+  margin: 0;
+  padding: 0;
   
   font-family: Arial, Helvetica, sans-serif;
   font-size: large;
@@ -12,13 +17,9 @@ body{
   flex-direction: column;
   align-items:center;
   
-  background-color: darkseagreen;
+  /*  */
+  background-color: rgb(172, 211, 172);
 }
-
-input{
-  background: none;
-}
-
 
 p{
   line-height: 1.4;
@@ -79,17 +80,47 @@ a:hover{
 }
 
 .A4{
-  background: linear-gradient(antiquewhite 60%,bisque);
+  background: linear-gradient(antiquewhite 60%,#ffe4c4);
   border: solid green;
+  /*  */
   box-shadow: rgba(0, 71, 9, 0.815) 0px 0px 10px 1px;  
-  height: 1100px;
+  /*  */
+  height: 1123px;
   margin-bottom: 25px;
   padding-bottom: 20px;
-  width: 800px;
+  width: 794px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   text-align: center;
 
+}
+
+
+.data-\[printCheck\][data-printCheck=true] {
+  border: none;
+  box-shadow: none;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input{
+  background: none;
+  outline: none;
+}
+
+input::placeholder{
+  background-color: rgba(175, 91, 161, 0.075);
+}
+
+input[type=checkbox]{
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+input:focus{
+  border-bottom: solid black 1px;
 }
