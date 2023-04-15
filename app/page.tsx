@@ -1,124 +1,231 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+'use client'
 
-const inter = Inter({ subsets: ['latin'] })
+import {  ReactNode, createContext, useContext, useEffect, useState } from "react";
 
-export default function Home() {
+
+
+const metaContext = createContext({
+  creatorID:"",
+  setCreatorID:(creatorID:string)=>{},
+  creatorName:"",
+  setCreatorName:(creatorName:string)=>{},
+  docName:"",
+  setDocName:(docName:string)=>{},
+  assignedFor:"",
+  setAssignedFor:(assignedFor:string)=>{},
+
+});
+
+export default function Page() {
+
+
+
+  const confirmReload = (e:Event) => {
+    e.preventDefault(); //works only on firefox as of 16/04
+    e.returnValue="yee"; //works on most browsers.
+  };
+
+  useEffect(()=>{
+    window.addEventListener('beforeunload',confirmReload);
+    return()=>{
+      window.removeEventListener('beforeunload',confirmReload);
+    };
+  },[]);
+  
+  const [docName,setDocName]=useState<string>("")
+  const [assignedFor,setAssignedFor]=useState<string>("")
+
+  const [creatorName,setCreatorName]=useState<string>("")
+  const [creatorID,setCreatorID]=useState<string>("")
+
+  
+  const value = {
+    creatorID:creatorID,
+    setCreatorID:setCreatorID,
+    creatorName:creatorName,
+    setCreatorName:setCreatorName,
+    docName:docName,
+    setDocName:setDocName,
+    assignedFor:assignedFor,
+    setAssignedFor:setAssignedFor
+  };
+
+
+
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    
+  
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    <main>
+      <metaContext.Provider value={value}>
+      <PageComponent/>
+      <PageComponent/>
+     </metaContext.Provider>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </main>
+    
+
   )
 }
+
+
+const sourceRef=(link:string, number:number)=>(
+  <sup>
+    <a href={link} target="_blank">
+      [{number}]
+    </a> 
+  </sup>
+)
+
+
+const PageComponent = () => {
+
+
+  return(
+
+  <div className="A4">
+
+    <input className="h1" placeholder="Page Heading">
+    </input>
+    <DocumentInfo/>
+ 
+      <MainContent>
+        {sampleText}
+      </MainContent>
+
+    <CreatorInfo/>
+  </div>
+  );
+}
+
+  {/* <h1>Θέμα Β</h1>
+  <div class="display: flex; justify-content: space-around; width: 100%;">
+    <div>
+      Βάσεις Δεδομένων Θεωρία
+    </div>
+    <div>
+      Εργασία B' Εξαμήνου
+    </div>
+  </div>
+  <div class="div-center-content">
+    
+    <h2 class="text-align: center;"><u>Δημιουργία πίνακα με DDL</u></h2>
+    <p class="border-bottom: solid black 1px; padding-bottom: 5px;">
+      <br/>
+      <i class="italicColor">CREATE TABLE</i> ΣΧΟΛΕΙΟ(
+        <br/>ΚΩΔΙΚΟΣ <i class="italicColor">VARCHAR(6)</i> <b><span class="color: blueviolet;">PRIMARY KEY</span></b>,
+        <br/>ΟΝΟΜΑ <i class="italicColor">VARCHAR(25)</i>,
+        <br/>ΔΙΕΥΘΥΝΣΗ <i class="italicColor">VARCHAR(40)</i>,
+        <br/>ΑΡ_ΜΑΘΗΤΩΝ <i class="italicColor">INT</i>
+        <br/>);
+    </p>
+    
+    <br/>
+    <h2 class="text-align: center;"><u>Εισαγωγή τιμών με DML</u></h2>
+    <div class="display: grid; grid-template-columns:repeat(2,1fr); gap: 40px;"> 
+
+      <p class="border-bottom: solid black 1px; padding-bottom: 5px;">
+        <br/>
+        <i class="italicColor">INSERT INTO</i> ΣΧΟΛΕΙΟ <i class="italicColor">VALUES</i>(
+          <br/><span class="seaGreen">'0Α1420'</span>,
+          <br/><span class="seaGreen">'9ο ΓΕ.Λ. ΑΘΗΝΩΝ'</span>,
+          <br/><span class="seaGreen">'ΑΘΗΝΑ'</span>,
+          <br/><i class="italicColor">245</i>
+        <br/>);
+      </p>
+    
+
+      <p class="border-bottom: solid black 1px; padding-bottom: 5px;">
+      <br/>
+      <i class="italicColor">INSERT INTO</i> ΣΧΟΛΕΙΟ <i class="italicColor">VALUES</i>(
+        <br/><span class="seaGreen">'0Σ0420'</span>,
+        <br/><span class="seaGreen">'2ο ΓΕ.Λ. ΠΕΙΡΑΙΑ'</span>,
+        <br/><span class="seaGreen">'ΠΕΙΡΑΙΑΣ'</span>,
+        <br/><i class="italicColor">311</i> 
+      <br/>);
+      </p>
+
+      <p class="border-bottom: solid black 1px; padding-bottom: 5px;">
+        <i class="italicColor">INSERT INTO</i> ΣΧΟΛΕΙΟ <i class="italicColor">VALUES</i>(
+          <br/><span class="seaGreen">'0Β0111'</span>,
+          <br/><span class="seaGreen">'2ο ΕΠΑ.Λ. ΑΘΗΝΑΣ'</span>,
+          <br/><span class="seaGreen">'ΑΘΗΝΑ'</span>,
+          <br/><i class="italicColor">186</i> 
+        <br/>);
+      </p>
+
+      <p class="border-bottom: solid black 1px; padding-bottom: 5px;">
+        <i class="italicColor">INSERT INTO</i> ΣΧΟΛΕΙΟ <i class="italicColor">VALUES</i>(
+          <br/><span class="seaGreen">'0ΒΙ020'</span>,
+          <br/><span class="seaGreen">'1ο ΓΕ.Λ. ΚΟΜΟΤΗΝΗΣ'</span>,
+          <br/><span class="seaGreen">'ΚΟΜΟΤΗΝΗ'</span>,
+          <br/><i class="italicColor">112</i> 
+        <br/>);
+      </p>
+    </div>
+    
+  </div>
+  <div class="display: flex; justify-content: space-around; width: 100%;">
+    <div>
+      Αλέξανδρος Πετράκε
+    </div>
+    <div>
+      tep8677
+    </div>
+  </div> */}
+
+
+  const MainContent = ({children}:{children:ReactNode}) => {
+    return(
+      <div className="div-center-content">
+        {children}
+      </div>
+    );
+  }
+
+
+  const DocumentInfo=()=>{
+  
+    const {assignedFor,setAssignedFor,docName,setDocName}=useContext(metaContext);
+  
+    return(
+      <div className="flex justify-around gap-x-7">
+  
+        <input placeholder="Made For" onChange={(event)=>setAssignedFor(event.target.value)} value={assignedFor}>
+        </input>
+  
+        <input className="text-right" placeholder="Document Name" onChange={(event)=>setDocName(event.target.value)} value={docName}>
+        </input>
+  
+      </div>
+    )
+  }
+  
+  const CreatorInfo=()=>{
+
+    const {creatorName,setCreatorName,creatorID,setCreatorID}=useContext(metaContext);
+
+    
+
+    
+    return(
+      <div className="flex justify-around gap-x-7">
+        <input placeholder="Creator Name" onChange={(event)=>setCreatorName(event.target.value)} value={creatorName}>
+          </input>
+        <input className="text-right" placeholder="Creator id" onChange={(event)=>setCreatorID(event.target.value)} value={creatorID}>
+        </input>
+      </div>
+    )
+  }
+
+  const PrintPrepare=()=>{
+
+    return(
+      <button>
+
+      </button>
+    )
+  }
+  
+  const sampleText="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.";
