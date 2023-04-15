@@ -14,7 +14,9 @@ const metaContext = createContext({
   assignedFor:"",
   setAssignedFor:(assignedFor:string)=>{},
   printPrep:false,
-  setPrintPrep:(printPrep:boolean)=>{}
+  setPrintPrep:(printPrep:boolean)=>{},
+  pageCount:1,
+  setPageCount:(oageCount:number)=>{}
 
 });
 
@@ -40,7 +42,10 @@ export default function Page() {
   const [creatorName,setCreatorName]=useState<string>("");
   const [creatorID,setCreatorID]=useState<string>("");
 
+  const [pageCount,setPageCount] = useState(1);
+
   const [printPrep,setPrintPrep]=useState<boolean>(false);
+
   
   const value = {
     creatorID:creatorID,
@@ -52,7 +57,9 @@ export default function Page() {
     assignedFor:assignedFor,
     setAssignedFor:setAssignedFor,
     printPrep:printPrep,
-    setPrintPrep:setPrintPrep
+    setPrintPrep:setPrintPrep,
+    pageCount:pageCount,
+    setPageCount:setPageCount
   };
 
 
@@ -64,13 +71,33 @@ export default function Page() {
 
     <main className="data-[colorDefault=true]:bg-[#ffe4c4]" data-colorDefault={printPrep}>
       <metaContext.Provider value={value}>
-        <PageComponent/>
-        <PageComponent/>
+        <PagesSet/>
         <OptionMenu/>
-     </metaContext.Provider>
+      </metaContext.Provider>
     </main>
     
 
+  )
+}
+
+const PagesSet=()=>{
+
+  ///add a confirm box when deleting pages..
+  const PagesToDisplay = [];
+  const {pageCount}=useContext(metaContext);
+
+  for(let i=0;i<pageCount;i++){
+    PagesToDisplay.push(
+      <div key={i}>
+        <PageComponent pageNum={i+1}/>
+      </div>
+    )
+  }
+
+  return(
+    <div>
+      {PagesToDisplay}
+    </div>
   )
 }
 
@@ -84,7 +111,9 @@ const sourceRef=(link:string, number:number)=>(
 )
 
 
-const PageComponent = () => {
+const PageComponent = (
+  {pageNum}:{pageNum:number}
+) => {
 
   const {printPrep}=useContext(metaContext);
 
@@ -101,6 +130,7 @@ const PageComponent = () => {
       </MainContent>
 
     <CreatorInfo/>
+    {pageNum}
   </div>
   );
 }
@@ -227,6 +257,8 @@ const PageComponent = () => {
 
   const OptionMenu=()=>{
     const {printPrep,setPrintPrep}=useContext(metaContext);
+    const {setPageCount,pageCount}=useContext(metaContext);
+
     
     return(
       <form className="h-fit grid-cols-2 grid A4 text-blue-500 data-[printCheck]" data-printCheck={printPrep}>
@@ -234,6 +266,17 @@ const PageComponent = () => {
           Print Show
           <input id="print" type="checkbox" onChange={()=>{setPrintPrep(!printPrep);}}/>
         </label>
+
+        <label>
+          Pages to Display
+          <input id="pageCount" type="number" onChange={(event)=>{
+            const pageCount=+event.target.value;
+            if(pageCount<=12&&pageCount>0){
+              setPageCount(pageCount);}
+            else if(pageCount>12){setPageCount(12)}
+            }} min={1} max={12}/>
+        </label>
+        
         {printPrep+""}
         <span>h</span>
         <span>h</span>
