@@ -83,12 +83,16 @@ export default function Page() {
 const PagesSet=()=>{
 
   ///add a confirm box when deleting pages..
-  const PagesToDisplay = [];
-  const {pageCount}=useContext(metaContext);
+  const PagesToDisplay:ReactNode[] = [];
+  const {setPageCount,pageCount,printPrep}=useContext(metaContext);
+  
+
+
 
   for(let i=0;i<pageCount;i++){
     PagesToDisplay.push(
       <div key={i}>
+        {!printPrep&&pageCount>1&&<button className="absolute" onClick={()=>{PagesToDisplay.splice(i,1);setPageCount(pageCount-1)}}>Remove Page</button>}
         <PageComponent pageNum={i+1}/>
       </div>
     )
@@ -269,7 +273,7 @@ const PageComponent = (
 
         <label>
           Pages to Display
-          <input id="pageCount" type="number" onChange={(event)=>{
+          <input id="pageCount" type="number" value={pageCount} onChange={(event)=>{
             const pageCount=+event.target.value;
             if(pageCount<=12&&pageCount>0){
               setPageCount(pageCount);}
