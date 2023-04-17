@@ -59,13 +59,16 @@ hr{
       flex-direction: column;
       align-items: center;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      min-height: 500px;
       line-height: 1.2;
       border: solid black 1px;
       border-radius: 5px;
       padding: 20px;
       margin-block: 20px;
       background-color: rgba(222, 184, 135, 0.247);
-      max-width: 675px;
+      width: 675px;
+      max-height: 850px;
+
       overflow: hidden;
 
 }
@@ -82,6 +85,7 @@ a:hover{
 .A4{
   background: linear-gradient(antiquewhite 60%,#ffe4c4);
   border: solid green;
+  overflow: hidden;
   /*  */
   box-shadow: rgba(0, 71, 9, 0.815) 0px 0px 10px 1px;  
   /*  */
@@ -98,7 +102,7 @@ a:hover{
 }
 
 
-.data-\[printCheck\][data-printCheck=true] {
+.data-\[print_check\][data-print_check=true] {
   border: none;
   box-shadow: none;
 }
