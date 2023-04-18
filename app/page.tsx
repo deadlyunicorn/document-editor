@@ -2,6 +2,13 @@
 
 import {  ReactNode, createContext, useContext, useEffect, useState } from "react";
 
+interface userInput{
+  input:string;
+  textarea:string
+}
+
+type userInputArray= userInput[];
+
 interface metaInterface{
   creatorID:string;
   setCreatorID:(creatorID:string)=>void;
@@ -13,8 +20,8 @@ interface metaInterface{
   setAssignedFor:(assignedFor:string)=>void,
   printPrep:boolean,
   setPrintPrep:(printPrep:boolean)=>void,
-  pageCountToDisplay:number[],
-  setPagesToDisplay:(PagesToDisplay:number[])=>void,
+  pageCountToDisplay:userInputArray,
+  setPagesToDisplay:(PagesToDisplay:userInputArray)=>void,
 }
 
 const metaContext = createContext<metaInterface>({
@@ -29,7 +36,7 @@ const metaContext = createContext<metaInterface>({
   printPrep:false,
   setPrintPrep:(printPrep:boolean)=>{},
   pageCountToDisplay:[],
-  setPagesToDisplay:(PagesToDisplay:number[])=>{}
+  setPagesToDisplay:(PagesToDisplay:userInputArray)=>{}
 });
 
 
@@ -47,7 +54,7 @@ export default function Page() {
   };
 
  
-  const [pageCountToDisplay,setPagesToDisplay]=useState<number[]>([]);
+  const [pageCountToDisplay,setPagesToDisplay]=useState<userInputArray>([{input:"",textarea:""}]);
   
   const [docName,setDocName]=useState<string>("");
   const [assignedFor,setAssignedFor]=useState<string>("");
@@ -122,30 +129,68 @@ const PagesSet=()=>{
     useEffect(()=>{
     },[pageCountToDisplay]);
 
+    const [textArea,setTextArea]=useState('');
+    const [heading,setHeading]=useState('');
 
+    const handleInputChange=(newValue:string,index:number)=>{
+      setPagesToDisplay((oldArray)=>{
+        const newArray=[...oldArray];
+        newArray[index]["input"]=newValue;
+        return newArray;
+      })
+
+
+
+    };
+
+    const handleTextAreaChange=(newValue:string,index:number)=>{
+        setPagesToDisplay((oldArray)=>{
+          const newArray=[...oldArray];
+          newArray[index]["textarea"]=newValue;
+          return newArray;
+      })  
+  
+    };
+  
   return(
     <div>
-      {pageCountToDisplay.map((pageNum:number,pageIndex:number)=>(
+      {pageCountToDisplay.map(({input,textarea},pageIndex:number)=>(
         <div key={pageIndex}>
         {!printPrep&&pageCountToDisplay.length>1&&
 
-        <button 
-          className="absolute"
-          onClick={()=>{
-            
-              removePage(pageIndex)
+          <button 
+            className="absolute"
+            onClick={()=>{
+              
+                removePage(pageIndex)
 
-              //setPagesToDisplay(PagesToDisplay.filter((page,i)=>{alert(i);return i!=index})) 
-              //at the beginning I used filter() that removed said the page using its index. Then the rest of the items were getting their indexes removed by 1 so that made it remove the rest, as well.. 
-              //this gets the value at the time of pressing the button, not when it was rendered.
-              //index above reaches until the page you want to remove then stops 
-              //find a way to get the div key of the div of the component. Maybe with document.querySelector()->pageNum?
-              }}>
-                Remove Page {pageIndex+1}
-                
-        </button>}
-        <PageComponent pageNum={pageIndex+1}/>
+                //setPagesToDisplay(PagesToDisplay.filter((page,i)=>{alert(i);return i!=index})) 
+                //at the beginning I used filter() that removed said the page using its index. Then the rest of the items were getting their indexes removed by 1 so that made it remove the rest, as well.. 
+                //this gets the value at the time of pressing the button, not when it was rendered.
+                //index above reaches until the page you want to remove then stops 
+                //find a way to get the div key of the div of the component. Maybe with document.querySelector()->pageNum?
+                }}>
+                  Remove Page {pageIndex+1}
+                  
+          </button>}
+          <div className="A4 data-[print_check]" data-print_check={printPrep}>
+
+            <div className="gap-10 flex flex-col">
+              <input className="h1" placeholder="Page Heading" onChange={(event)=>{handleInputChange(event.target.value,pageIndex)}} value={input}/>
+              <DocumentInfo/>
+              <MainContent>
+                <textarea placeholder="hello" className=" w-full" onChange={(event)=>{handleTextAreaChange(event.target.value,pageIndex)}} value={textarea}/>
+              </MainContent>
+            </div>
+
+            <div>
+              <CreatorInfo/>
+              {pageIndex+1}
+            </div>
+
+          </div>
       </div>
+
       ))}
     </div>
   )
@@ -161,32 +206,7 @@ const sourceRef=(link:string, number:number)=>(
 )
 
 
-const PageComponent = (
-  {pageNum}:{pageNum:number}
-) => {
 
-  const {printPrep}=useContext(metaContext);
-
-  return(
-
-  <div className="A4 data-[print_check]" data-print_check={printPrep}>
-
-    <div className="gap-10 flex flex-col">
-      <input className="h1" placeholder="Page Heading"/>
-      <DocumentInfo/>
-      <MainContent>
-        <textarea placeholder="hello" className=" w-full"/>
-      </MainContent>
-    </div>
-
-    <div>
-      <CreatorInfo/>
-      {pageNum}
-    </div>
-
-  </div>
-  );
-}
 
  
 
@@ -251,7 +271,7 @@ const PageComponent = (
 
         <button  onClick={()=>{
               pageCountToDisplay.length<12&&
-              setPagesToDisplay([...pageCountToDisplay,pageCountToDisplay.length+1])
+              setPagesToDisplay([...pageCountToDisplay,{input:"",textarea:""}])
             }}>
           Add Page
         </button>
