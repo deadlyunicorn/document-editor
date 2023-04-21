@@ -129,9 +129,6 @@ const PagesSet=()=>{
     useEffect(()=>{
     },[pageCountToDisplay]);
 
-    const [textArea,setTextArea]=useState('');
-    const [heading,setHeading]=useState('');
-
     const handleInputChange=(newValue:string,index:number)=>{
       setPagesToDisplay((oldArray)=>{
         const newArray=[...oldArray];
@@ -151,9 +148,14 @@ const PagesSet=()=>{
       })  
   
     };
+
+    const [menuIsShown,setMenuShow]=useState(false);
+    const [selectedText,setSelectedText]=useState('');
+    const [mousePos,SetMousePos]=useState<number[]>([]);
+ //   const menuShow=()=>{};
   
   return(
-    <div>
+    <div >
       {pageCountToDisplay.map(({input,textarea},pageIndex:number)=>(
         <div key={pageIndex}>
         {!printPrep&&pageCountToDisplay.length>1&&
@@ -179,8 +181,33 @@ const PagesSet=()=>{
               <input className="h1" placeholder="Page Heading" onChange={(event)=>{handleInputChange(event.target.value,pageIndex)}} value={input}/>
               <DocumentInfo/>
               <MainContent>
-                <textarea placeholder="hello" className=" w-full" onChange={(event)=>{handleTextAreaChange(event.target.value,pageIndex)}} value={textarea}/>
+                <textarea 
+                onClick={()=>{setMenuShow(false);}}
+                placeholder="hello" 
+                className=" w-full" 
+                onChange={(event)=>{handleTextAreaChange(event.target.value,pageIndex)}} value={textarea}
+                //onSelect={(event)=>{setSelectedText(event.target);alert(event.target.value)}}
+                onContextMenu={
+                  (event)=>{
+                    event.preventDefault();
+                    setMenuShow(true);
+                    SetMousePos([
+                      event.clientX+window.scrollX
+                    ,
+                      event.clientY+window.scrollY
+                    ])
+
+                  }
+                  }
+                  onMouseUp={()=>{
+                    window.getSelection()?setSelectedText(window.getSelection().toString()):null;
+                  }}
+                  />
+                  
+                
               </MainContent>
+              {selectedText}
+              {menuIsShown&&<Menu posX={mousePos[0]} posY={mousePos[1]} setMenuShow={setMenuShow} setSelectedText={setSelectedText} selectedText={selectedText}/>}
             </div>
 
             <div>
@@ -193,6 +220,63 @@ const PagesSet=()=>{
 
       ))}
     </div>
+  )
+}
+
+
+
+const Menu = ({posX,posY,setMenuShow,setSelectedText,selectedText}:
+  {posX:number,posY:number,
+    setMenuShow:(x:boolean)=>void,
+    selectedText:string,setSelectedText:(text:string)=>void}) => {
+  
+
+
+
+  const setBold = (isClicked:boolean,setClicked:(boolean:boolean)=>void) =>{
+    if(!isClicked){
+      setSelectedText(`<b> ${selectedText} </b>`); setClicked(true);
+    }
+    else if(isClicked){
+      setSelectedText(selectedText.split('<b>').join("").split('</b>').join(" "));setClicked(false)
+    }
+  };
+
+  const setItalic = (isClicked:boolean,setClicked:(boolean:boolean)=>void) =>{
+    if(!isClicked){
+      setSelectedText(`<i> ${selectedText} </i>`); setClicked(true);
+    }
+    else if(isClicked){
+      setSelectedText(selectedText.split('<i>').join("").split('</i>').join(" "));setClicked(false)
+    }
+  };
+
+  
+  
+  return(
+    <div 
+    style={{left:posX,top:posY}}
+    onMouseLeave={()=>{setMenuShow(false)}}
+    className="absolute bg-gray-200 flex flex-col rounded-md">
+      <Button onClickEvent={setBold}>
+        Bold
+      </Button>
+      <Button onClickEvent={setItalic}>
+        Indent
+      </Button>
+
+    </div>
+  );
+}
+
+const Button = ({children,onClickEvent}:{children:ReactNode,onClickEvent:(boolean:boolean,fun:(boolean:boolean)=>void)=>void}) => {
+  const [isClicked,setClicked]=useState(false);
+  return(
+  <button 
+  className="hover:bg-gray-50 py-1 px-2 text-left rounded-md" 
+  onClick={()=>{onClickEvent(isClicked,setClicked)}}>
+    {children}
+  </button>
   )
 }
 
