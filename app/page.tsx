@@ -1,15 +1,18 @@
 'use client'
 
-import {  ReactNode, createContext, useContext, useEffect, useState } from "react";
+import React, {  ReactNode, createContext , useEffect, useState } from "react";
+import PagesSet from "@/app/components/A4pages";
+import OptionMenu from "@/app/components/SettingsBelow";
+
 
 interface userInput{
   input:string;
-  textarea:string
+  textarea:ReactNode
 }
 
 type userInputArray= userInput[];
 
-interface metaInterface{
+export interface metaInterface{
   creatorID:string;
   setCreatorID:(creatorID:string)=>void;
   creatorName:string;
@@ -20,11 +23,11 @@ interface metaInterface{
   setAssignedFor:(assignedFor:string)=>void,
   printPrep:boolean,
   setPrintPrep:(printPrep:boolean)=>void,
-  pageCountToDisplay:userInputArray,
+  pagesToDisplay:userInputArray,
   setPagesToDisplay:(PagesToDisplay:userInputArray)=>void,
 }
 
-const metaContext = createContext<metaInterface>({
+export const metaContext = createContext<metaInterface>({
   creatorID:"",
   setCreatorID:(creatorID:string)=>{},
   creatorName:"",
@@ -35,26 +38,18 @@ const metaContext = createContext<metaInterface>({
   setAssignedFor:(assignedFor:string)=>{},
   printPrep:false,
   setPrintPrep:(printPrep:boolean)=>{},
-  pageCountToDisplay:[],
+  pagesToDisplay:[],
   setPagesToDisplay:(PagesToDisplay:userInputArray)=>{}
 });
 
-
-
-
-
 export default function Page() {
-
-
-
 
   const confirmReload = (e:Event) => {
     e.preventDefault(); //works only on firefox as of 16/04
-    e.returnValue="yee"; //works on most browsers.
+    e.returnValue=true; //works on most browsers.
   };
-
  
-  const [pageCountToDisplay,setPagesToDisplay]=useState<userInputArray>([{input:"",textarea:""}]);
+  const [pagesToDisplay,setPagesToDisplay]=useState<userInputArray>([{input:"",textarea:""}]);
   
   const [docName,setDocName]=useState<string>("");
   const [assignedFor,setAssignedFor]=useState<string>("");
@@ -65,18 +60,12 @@ export default function Page() {
 
   const [printPrep,setPrintPrep]=useState<boolean>(false);
 
-
-
-
-
-
   useEffect(()=>{
     window.addEventListener('beforeunload',confirmReload);
     return()=>{
       window.removeEventListener('beforeunload',confirmReload);
     };
   },[]);
-
   
   const value = {
     creatorID:creatorID,
@@ -89,7 +78,7 @@ export default function Page() {
     setAssignedFor:setAssignedFor,
     printPrep:printPrep,
     setPrintPrep:setPrintPrep,
-    pageCountToDisplay:pageCountToDisplay,
+    pagesToDisplay:pagesToDisplay,
     setPagesToDisplay:setPagesToDisplay,
   };
 
@@ -99,8 +88,6 @@ export default function Page() {
 
 
   return (
-    
-  
 
     <main className="data-[color_default=true]:bg-[#ffe4c4]" data-color_default={printPrep}>
       <metaContext.Provider value={value}>
@@ -108,178 +95,8 @@ export default function Page() {
         <OptionMenu/>
       </metaContext.Provider>
     </main>
-    
-
   )
 }
-
-const PagesSet=()=>{
-
-  ///add a confirm box when deleting pages..
-  const {pageCountToDisplay,setPagesToDisplay,printPrep}=useContext(metaContext);
-
-  
-
-    const removePage=(key:number)=>{
-      const newPagesToDisplay = pageCountToDisplay.filter((page,index)=>index!==key);
-      setPagesToDisplay([...newPagesToDisplay]); //spread operator needed for some reason
-    }
-  
-
-    useEffect(()=>{
-    },[pageCountToDisplay]);
-
-    const handleInputChange=(newValue:string,index:number)=>{
-      setPagesToDisplay((oldArray)=>{
-        const newArray=[...oldArray];
-        newArray[index]["input"]=newValue;
-        return newArray;
-      })
-
-
-
-    };
-
-    const handleTextAreaChange=(newValue:string,index:number)=>{
-        setPagesToDisplay((oldArray)=>{
-          const newArray=[...oldArray];
-          newArray[index]["textarea"]=newValue;
-          return newArray;
-      })  
-  
-    };
-
-    const [menuIsShown,setMenuShow]=useState(false);
-    const [selectedText,setSelectedText]=useState('');
-    const [mousePos,SetMousePos]=useState<number[]>([]);
- //   const menuShow=()=>{};
-  
-  return(
-    <div >
-      {pageCountToDisplay.map(({input,textarea},pageIndex:number)=>(
-        <div key={pageIndex}>
-        {!printPrep&&pageCountToDisplay.length>1&&
-
-          <button 
-            className="absolute"
-            onClick={()=>{
-              
-                removePage(pageIndex)
-
-                //setPagesToDisplay(PagesToDisplay.filter((page,i)=>{alert(i);return i!=index})) 
-                //at the beginning I used filter() that removed said the page using its index. Then the rest of the items were getting their indexes removed by 1 so that made it remove the rest, as well.. 
-                //this gets the value at the time of pressing the button, not when it was rendered.
-                //index above reaches until the page you want to remove then stops 
-                //find a way to get the div key of the div of the component. Maybe with document.querySelector()->pageNum?
-                }}>
-                  Remove Page {pageIndex+1}
-                  
-          </button>}
-          <div className="A4 data-[print_check]" data-print_check={printPrep}>
-
-            <div className="gap-10 flex flex-col">
-              <input className="h1" placeholder="Page Heading" onChange={(event)=>{handleInputChange(event.target.value,pageIndex)}} value={input}/>
-              <DocumentInfo/>
-              <MainContent>
-                <textarea 
-                onClick={()=>{setMenuShow(false);}}
-                placeholder="hello" 
-                className=" w-full" 
-                onChange={(event)=>{handleTextAreaChange(event.target.value,pageIndex)}} value={textarea}
-                //onSelect={(event)=>{setSelectedText(event.target);alert(event.target.value)}}
-                onContextMenu={
-                  (event)=>{
-                    event.preventDefault();
-                    setMenuShow(true);
-                    SetMousePos([
-                      event.clientX+window.scrollX
-                    ,
-                      event.clientY+window.scrollY
-                    ])
-
-                  }
-                  }
-                  onMouseUp={()=>{
-                    window.getSelection()?setSelectedText(window.getSelection().toString()):null;
-                  }}
-                  />
-                  
-                
-              </MainContent>
-              {selectedText}
-              {menuIsShown&&<Menu posX={mousePos[0]} posY={mousePos[1]} setMenuShow={setMenuShow} setSelectedText={setSelectedText} selectedText={selectedText}/>}
-            </div>
-
-            <div>
-              <CreatorInfo/>
-              {pageIndex+1}
-            </div>
-
-          </div>
-      </div>
-
-      ))}
-    </div>
-  )
-}
-
-
-
-const Menu = ({posX,posY,setMenuShow,setSelectedText,selectedText}:
-  {posX:number,posY:number,
-    setMenuShow:(x:boolean)=>void,
-    selectedText:string,setSelectedText:(text:string)=>void}) => {
-  
-
-
-
-  const setBold = (isClicked:boolean,setClicked:(boolean:boolean)=>void) =>{
-    if(!isClicked){
-      setSelectedText(`<b> ${selectedText} </b>`); setClicked(true);
-    }
-    else if(isClicked){
-      setSelectedText(selectedText.split('<b>').join("").split('</b>').join(" "));setClicked(false)
-    }
-  };
-
-  const setItalic = (isClicked:boolean,setClicked:(boolean:boolean)=>void) =>{
-    if(!isClicked){
-      setSelectedText(`<i> ${selectedText} </i>`); setClicked(true);
-    }
-    else if(isClicked){
-      setSelectedText(selectedText.split('<i>').join("").split('</i>').join(" "));setClicked(false)
-    }
-  };
-
-  
-  
-  return(
-    <div 
-    style={{left:posX,top:posY}}
-    onMouseLeave={()=>{setMenuShow(false)}}
-    className="absolute bg-gray-200 flex flex-col rounded-md">
-      <Button onClickEvent={setBold}>
-        Bold
-      </Button>
-      <Button onClickEvent={setItalic}>
-        Indent
-      </Button>
-
-    </div>
-  );
-}
-
-const Button = ({children,onClickEvent}:{children:ReactNode,onClickEvent:(boolean:boolean,fun:(boolean:boolean)=>void)=>void}) => {
-  const [isClicked,setClicked]=useState(false);
-  return(
-  <button 
-  className="hover:bg-gray-50 py-1 px-2 text-left rounded-md" 
-  onClick={()=>{onClickEvent(isClicked,setClicked)}}>
-    {children}
-  </button>
-  )
-}
-
 
 const sourceRef=(link:string, number:number)=>(
   <sup>
@@ -289,81 +106,4 @@ const sourceRef=(link:string, number:number)=>(
   </sup>
 )
 
-
-
-
- 
-
-  const MainContent = ({children}:{children:ReactNode}) => {
-    return(
-      <div className="div-center-content">
-        {children}
-      </div>
-    );
-  }
-
-
-  const DocumentInfo=()=>{
-  
-    const {assignedFor,setAssignedFor,docName,setDocName}=useContext(metaContext);
-  
-    return(
-      <div className="flex justify-around gap-x-7">
-  
-        <input placeholder="Made For" onChange={(event)=>setAssignedFor(event.target.value)} value={assignedFor}>
-        </input>
-  
-        <input className="text-right" placeholder="Document Name" onChange={(event)=>setDocName(event.target.value)} value={docName}>
-        </input>
-  
-      </div>
-    )
-  }
-  
-
-
-
-  const CreatorInfo=()=>{
-
-    const {creatorName,setCreatorName,creatorID,setCreatorID}=useContext(metaContext);
-
-    
-
-    
-    return(
-      <div className="flex justify-around gap-x-7">
-        <input placeholder="Creator Name" onChange={(event)=>setCreatorName(event.target.value)} value={creatorName}>
-          </input>
-        <input className="text-right" placeholder="Creator id" onChange={(event)=>setCreatorID(event.target.value)} value={creatorID}>
-        </input>
-      </div>
-    )
-  }
-
-  const OptionMenu=()=>{
-    const {printPrep,setPrintPrep}=useContext(metaContext);
-
-    const {pageCountToDisplay,setPagesToDisplay}=useContext(metaContext);
-
-    
-    return(
-      <div className="h-fit grid-cols-2 grid A4 text-blue-500 data-[print_check]" data-print_check={printPrep}>
-        <label>
-          Print Show
-          <input id="print" type="checkbox" onChange={()=>{setPrintPrep(!printPrep);}}/>
-        </label>
-
-        <button  onClick={()=>{
-              pageCountToDisplay.length<12&&
-              setPagesToDisplay([...pageCountToDisplay,{input:"",textarea:""}])
-            }}>
-          Add Page
-        </button>
-      
-
-      </div>
-
-    )
-  }
-  
-  const sampleText="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.";
+const sampleText="At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.";
