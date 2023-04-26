@@ -59,7 +59,7 @@ hr{
       flex-direction: column;
       align-items: center;
       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-      min-height: 500px;
+      height: 850px;
       line-height: 1.2;
       border: solid black 1px;
       border-radius: 5px;

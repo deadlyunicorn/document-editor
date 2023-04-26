@@ -10,7 +10,7 @@ interface userInput{
   textarea:ReactNode
 }
 
-type userInputArray= userInput[];
+export type userInputArray= userInput[];
 
 export interface metaInterface{
   creatorID:string;
