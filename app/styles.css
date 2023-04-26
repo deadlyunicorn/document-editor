@@ -46,13 +46,33 @@ h2{
   text-shadow: 1px 2px rgb(93, 236, 93);
 }
 
-li{
+ul li {
   margin-bottom: 20px;
+  list-style: disc;
+  list-style-position: inside;
+  padding-left: 20px;
+}
+
+ol li {
+  margin-bottom: 20px;
+  list-style: circle;
+  list-style-position: inside;
+  padding-left: 20px;
+}
+
+ol ol {
+  padding-left: 20px;
+}
+
+ul ul {
+  padding-left: 20px;
 }
 
 hr{
   width: 80%;
 }
+
+
 
 .div-center-content{
       display: flex;

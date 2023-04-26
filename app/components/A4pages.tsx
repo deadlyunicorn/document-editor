@@ -1,5 +1,5 @@
 import Menu from "@/app/components/buttons";
-import {  ReactNode, useContext, useState } from "react";
+import {  ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { metaContext } from "../page";
 import { userInputArray } from "../page";
 
@@ -44,13 +44,9 @@ const PagesSet=()=>{
                 setMenuShow={setMenuShow} 
                 setPagesToDisplay={setPagesToDisplay} 
                 setSelectedText={setSelectedText} 
+                textarea={textarea}
                 pageIndex={pageIndex} 
               />
-
-              {selectedText}
-              <br/>
-              {pagesToDisplay[pageIndex]["textarea"]}
-              
             </div>
             <div>
               <CreatorInfo/>
@@ -59,14 +55,14 @@ const PagesSet=()=>{
 
 
           </div>
-          {menuIsShown&&
+          <div className="data-[menuIsShown=true]:inline hidden" data-menuIsShown={menuIsShown}>
               <Menu 
                 posX={mousePos[0]} 
                 posY={mousePos[1]} 
                 setMenuShow={setMenuShow}
                 selectedText={selectedText}
               />
-              }
+          </div>
       </div>
 
 
@@ -77,13 +73,15 @@ const PagesSet=()=>{
 
 
 
-const MainContent = ({setMousePos,setMenuShow,setPagesToDisplay,setSelectedText,pageIndex}:{
+const MainContent = ({setMousePos,setMenuShow,setSelectedText,pageIndex,textarea}:{
   setMousePos:([]:number[])=>void,
   setMenuShow:(bool:boolean)=>void,
-  setPagesToDisplay:(value:userInputArray) => void
-  setSelectedText: (text: string) => void
-  pageIndex:number
+  setSelectedText: (text: string) => void,
+  pageIndex:number,
+  textarea:ReactNode
 }) => {
+
+  const {pagesToDisplay ,setPagesToDisplay}=useContext(metaContext);
 
 
   const handleTextAreaChange=(newValue:ReactNode,index:number)=>{
@@ -106,15 +104,25 @@ const MainContent = ({setMousePos,setMenuShow,setPagesToDisplay,setSelectedText,
 
   }
 
+  const setSelection=()=>{
+    setSelectedText(window.getSelection()!.toString());
+  }
 
+  const lastTextArea=useRef(null);
+  const [triggerStore,setTiggleStore]=useState(false);
+
+  useEffect(()=>{
+    lastTextArea.current.innerHTML=textarea;
+  },[pagesToDisplay.length])
 
   return(
     <div className="div-center-content">
       <div
-                contentEditable={true}
+                contentEditable
+                ref={lastTextArea}
                 onClick={()=>{setMenuShow(false);}}
                 placeholder="hello" 
-                className=" w-full h-full" 
+                className=" w-full h-full"
                 
                 //!!! onChange won't do
                 onInput={(event)=>{
@@ -122,7 +130,10 @@ const MainContent = ({setMousePos,setMenuShow,setPagesToDisplay,setSelectedText,
                 }}
                 //onSelect={(event)=>{setSelectedText(event.target);alert(event.target.value)}}
                 onContextMenu={handleRightClick as any}
-                onMouseUp={()=>{window.getSelection()?setSelectedText(window.getSelection()!.toString()):null;}}
+                onMouseUp={setSelection}
+                onDoubleClick={setSelection}
+                onKeyDown={setSelection}
+                onKeyUp={setSelection}
                 >
                 </div>
     </div>

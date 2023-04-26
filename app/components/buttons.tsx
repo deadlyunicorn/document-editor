@@ -10,79 +10,24 @@ const Menu = (
   selectedText:string
     }) => {
 
-  const setBold = (isClicked:number,setClicked:(boolean:number)=>void) =>{
-    if(isClicked==0){
-      document.execCommand("bold",false)
-      setClicked(1);
-    }
-    else if(isClicked==1){
-      document.execCommand("bold",false)
-
-      setClicked(0)
-    }
-
-  };
 
   const setCenter = (isClicked:number,setClicked:(boolean:number)=>void) =>{
-    if(isClicked==0){
       document.execCommand("insertHTML",false,`<center>${selectedText}</center><br/>`)
-      setClicked(1);
-    }
-    else if(isClicked==1){
-      document.execCommand("undo",false)
-      setClicked(2)
-    }
-    else if(isClicked==2){
-      document.execCommand("redo",false)
-      setClicked(1)
-    }
+ 
   };
 
-  const setItalic = (isClicked:number,setClicked:(boolean:number)=>void) =>{
-    if(isClicked==0){
-      setClicked(1);
-      document.execCommand("insertHTML",false,`<em>${selectedText}</em>`)
-    }
-    else if(isClicked==1){
-      setClicked(2)
-      document.execCommand("undo",false)
-    }
-    else if(isClicked==2){
-      document.execCommand("redo",false)
-      setClicked(1)
-    }
-    
-    }
-  const setIndent = (isClicked:number,setClicked:(boolean:number)=>void) =>{
-    if(isClicked==0){
-      setClicked(isClicked+1);
-      document.execCommand("indent",false)
-    }
-    else if(isClicked==1){
-      setClicked(2);
-      document.execCommand("undo",false);}
-
-    else if(isClicked==2){
-      document.execCommand("redo",false)
-      setClicked(1)
-    }
-    
-    };
+ 
 
   const setOList = (isClicked:number,setClicked:(boolean:number)=>void) =>{
-    if(isClicked==0){
-      document.execCommand("insertOrderedList",false)
-      setClicked(1);
+    document.execCommand("insertHTML",false,`<ol><li>${selectedText}</li></ol><br/>`)
     }
-    else if(isClicked==1){
-      document.execCommand("undo",false);
-      setClicked(2)
-    }
-    else if(isClicked==2){
-      document.execCommand("redo",false)
-      setClicked(1)
-    };
-    };
+
+  const [color1,setColor1]=useState('');
+  const [color2,setColor2]=useState('');
+  const [color3,setColor3]=useState('');
+  const [bgColor,setBgColor]=useState('');
+  const [fontSize,setFontSize]=useState('');
+
 
   
   
@@ -95,21 +40,147 @@ const Menu = (
         top:posY
       }
     }
-    onMouseLeave={()=>{setMenuShow(false)}}
-    className="absolute bg-gray-200 flex flex-col rounded-md">
+    className="absolute bg-gray-200 flex rounded-md">
 
-      <Button onClickEvent={setBold}>
+    <div className="flex flex-col">
+
+      <Button onClickEvent={()=>{document.execCommand("bold")}}>
         Bold
       </Button>
-      <Button onClickEvent={setItalic}>
+      <Button onClickEvent={()=>{document.execCommand("italic")}}>
         Italic
       </Button>
-      <Button onClickEvent={setIndent}>
+      <Button onClickEvent={()=>{document.execCommand("underline")}}>
+        Underline
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("strikeThrough")}}>
+        Strike
+      </Button>
+    </div>
+    
+    <div className="flex flex-col">
+
+      <Button onClickEvent={()=>{document.execCommand("indent")}}>
         Indent
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("outdent")}}>
+        Outdent
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("justifyLeft")}}>
+        Left
       </Button>
       <Button onClickEvent={setCenter}>
         Center
       </Button>
+      
+    </div>
+
+    <div className="flex flex-col">
+
+      <Button onClickEvent={()=>{document.execCommand("insertUnorderedList")}}>
+        Flist
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("insertOrderedList")}}>
+        Elist
+      </Button>
+    </div>
+
+    <div className="flex flex-col">
+
+      <Button onClickEvent={()=>{document.execCommand("superscript")}}>
+        Sup
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("subscript")}}>
+        Sub
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("removeFormat")}}>
+        Clean
+      </Button>
+    </div>
+
+    <div className="flex flex-col">
+
+      
+      <Button onClickEvent={()=>{
+        const link=prompt("Enter Link:");
+        document.execCommand("createLink",false,link)}}>
+        Link
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("unlink")}}>
+        Unlink
+      </Button>
+      <Button onClickEvent={()=>{document.execCommand("undo")}}>
+        Undo
+      </Button>
+    </div>
+
+    <div className="flex flex-col">
+
+      
+      <Button onClickEvent={()=>{
+        const size=prompt("Enter Size:");
+        setFontSize(size)}}>
+          Size
+      </Button>
+      <Button onClickEvent={()=>{
+        document.execCommand("fontSize",false,fontSize)}}>
+          {fontSize+"px"}
+      </Button>
+      <Button onClickEvent={()=>{
+        const color=prompt("Enter color:");
+        setBgColor(color)}}>
+          setBgCol
+      </Button>
+      <Button onClickEvent={()=>{
+        document.execCommand("hiliteColor",false,bgColor)}}>
+        <span style={{color:bgColor}}>bgColor</span>
+      </Button>
+    </div>
+
+    <div className="flex flex-col">
+
+      
+      <Button onClickEvent={()=>{
+            const color=prompt("Enter color:");
+            setColor1(color)}}>
+              setColor1
+      </Button>
+      <Button onClickEvent={()=>{
+            const color=prompt("Enter color:");
+            setColor2(color)}}>
+              setColor2
+      </Button>
+      <Button onClickEvent={()=>{
+            const color=prompt("Enter color:");
+            setColor3(color)}}>
+              setColor3
+      </Button>
+    </div>
+
+  <div className="flex flex-col">
+
+       
+  <Button onClickEvent={()=>{
+        document.execCommand("foreColor",false,color1)}}>
+          <span style={{color:color1}} >
+            Color1
+          </span>
+  </Button>
+  <Button onClickEvent={()=>{
+        document.execCommand("foreColor",false,color2)}}>
+          <span style={{color:color2}} >
+            Color2
+          </span>
+  </Button>
+  <Button onClickEvent={()=>{
+        document.execCommand("foreColor",false,color3)}}>
+          <span style={{color:color3}} >
+            Color3
+          </span>
+  </Button>
+  </div>
+   
+
 
     </div>
   );
