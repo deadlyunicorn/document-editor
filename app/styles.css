@@ -11,14 +11,14 @@ main{
   
   font-family: Arial, Helvetica, sans-serif;
   font-size: large;
-  color: firebrick;
+  color: #b22222;
 
   display: flex;
   flex-direction: column;
   align-items:center;
   
   /*  */
-  background-color: rgb(172, 211, 172);
+  background-color: #acd3ac;
 }
 
 p{
@@ -42,8 +42,8 @@ h2{
 .h1{
   text-align: center;
   font-size: xx-large;
-  color: rgb(27, 189, 27);
-  text-shadow: 1px 2px rgb(93, 236, 93);
+  color: #1bbd1b;
+  text-shadow: 1px 2px #5dec5d;
 }
 
 ul li {
@@ -72,6 +72,11 @@ hr{
   width: 80%;
 }
 
+label{
+  cursor: pointer;
+  width: fit-content;
+}
+
 
 
 .div-center-content{
@@ -85,7 +90,7 @@ hr{
       border-radius: 5px;
       padding: 20px;
       margin-block: 20px;
-      background-color: rgba(222, 184, 135, 0.247);
+      background-color: rgba(224, 224, 224, 0.247);
       width: 675px;
       max-height: 850px;
 
@@ -104,10 +109,10 @@ a:hover{
 
 .A4{
   background: linear-gradient(antiquewhite 60%,#ffe4c4);
-  border: solid green;
+  border: solid rgba(0, 0, 0, 0.356);
   overflow: hidden;
   /*  */
-  box-shadow: rgba(0, 71, 9, 0.815) 0px 0px 10px 1px;  
+  box-shadow: rgba(0, 0, 0, 0.418) 0px 0px 10px 1px;  
   /*  */
   height: 1123px;
   margin-bottom: 25px;
@@ -142,7 +147,6 @@ input::placeholder{
 
 input[type=checkbox]{
   margin-left: 10px;
-  margin-top: 20px;
 }
 
 input:focus{
