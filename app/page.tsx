@@ -1,9 +1,12 @@
 'use client'
 
-import React, {  ReactNode, createContext , useEffect, useState } from "react";
+import React, {  ReactNode, useEffect, useState } from "react";
 import PagesSet from "@/app/components/A4pages";
 import OptionMenu from "@/app/components/SettingsBelow";
+import Alert from "./components/Alert";
 
+import { metaContext} from "./components/metaContext";
+import { colorContext } from "./components/colorContext";
 
 interface userInput{
   input:string;
@@ -12,35 +15,8 @@ interface userInput{
 
 export type userInputArray= userInput[];
 
-export interface metaInterface{
-  creatorID:string;
-  setCreatorID:(creatorID:string)=>void;
-  creatorName:string;
-  setCreatorName:(creatorName:string)=>void;
-  docName:string;
-  setDocName:(docName:string)=>void,
-  assignedFor:string,
-  setAssignedFor:(assignedFor:string)=>void,
-  printPrep:boolean,
-  setPrintPrep:(printPrep:boolean)=>void,
-  pagesToDisplay:userInputArray,
-  setPagesToDisplay:(PagesToDisplay:userInputArray)=>void,
-}
 
-export const metaContext = createContext<metaInterface>({
-  creatorID:"",
-  setCreatorID:(creatorID:string)=>{},
-  creatorName:"",
-  setCreatorName:(creatorName:string)=>{},
-  docName:"",
-  setDocName:(docName:string)=>{},
-  assignedFor:"",
-  setAssignedFor:(assignedFor:string)=>{},
-  printPrep:false,
-  setPrintPrep:(printPrep:boolean)=>{},
-  pagesToDisplay:[],
-  setPagesToDisplay:(PagesToDisplay:userInputArray)=>{}
-});
+
 
 export default function Page() {
 
@@ -67,7 +43,10 @@ export default function Page() {
     };
   },[]);
   
-  const value = {
+  const [characterCount,setCharacterCount]=useState(0);
+
+
+  const metaValue = {
     creatorID:creatorID,
     setCreatorID:setCreatorID,
     creatorName:creatorName,
@@ -80,7 +59,55 @@ export default function Page() {
     setPrintPrep:setPrintPrep,
     pagesToDisplay:pagesToDisplay,
     setPagesToDisplay:setPagesToDisplay,
+    characterCount:characterCount,
+    setCharacterCount:setCharacterCount
   };
+
+
+
+  const [bg1,setBg1]=useState(localStorage.getItem("bg1")||"antiquewhite")
+  const [bg2,setBg2]=useState(localStorage.getItem("bg2")||"#ffe4c4")
+  const [textColor,setTextColor]=useState(localStorage.getItem("textColor")||"firebrick");
+  const [headingColor,setHeadingColor]=useState(localStorage.getItem("headingColor")||"#1bbd1b");
+  const [headingColor2,setHeadingColor2]=useState(localStorage.getItem("headingColor2")||"#5dec5d");
+  const [pageBg,setPageBg]=useState(localStorage.getItem("pageBg")||"#acd3ac")
+
+  const colorValue ={
+    bg1:bg1,
+    setBg1:setBg1,
+    bg2:bg2,
+    setBg2:setBg2,
+    textColor:textColor,
+    setTextColor:setTextColor,
+    headingColor:headingColor,
+    setHeadingColor:setHeadingColor,
+    headingColor2:headingColor2,
+    setHeadingColor2:setHeadingColor2,
+    pageBg:pageBg,
+    setPageBg:setPageBg
+  }
+
+
+  useEffect(()=>{
+      localStorage.setItem("bg1",bg1);
+  },[bg1])
+  useEffect(()=>{
+    localStorage.setItem("bg2",bg2);
+  },[bg2])
+  useEffect(()=>{
+    localStorage.setItem("textColor",textColor);
+  },[textColor])
+  useEffect(()=>{
+    localStorage.setItem("headingColor",headingColor);
+  },[headingColor])
+  useEffect(()=>{
+    localStorage.setItem("headingColor2",headingColor2);
+  },[headingColor2])
+  useEffect(()=>{
+    localStorage.setItem("pageBg",pageBg);
+  },[pageBg])
+
+
 
  
 
@@ -89,10 +116,21 @@ export default function Page() {
 
   return (
 
-    <main className="data-[color_default=true]:bg-[#ffe4c4]" data-color_default={printPrep}>
-      <metaContext.Provider value={value}>
-        <PagesSet/>
-        <OptionMenu/>
+    <main 
+    style={{backgroundColor:pageBg}}
+    className="data-[color_default=true]:bg-[#ffe4c4]" data-color_default={printPrep}>
+      
+     
+      
+      <metaContext.Provider value={metaValue}>
+        <colorContext.Provider value={colorValue}>
+          
+              {(characterCount)>1500&&!printPrep&&
+          <Alert/>}
+
+          <PagesSet/>
+          <OptionMenu/>
+        </colorContext.Provider>
       </metaContext.Provider>
     </main>
   )
