@@ -1,3 +1,4 @@
+'use client'
 import Menu from "@/app/components/buttons";
 import {  ReactNode, useContext, useEffect, useRef, useState } from "react";
 
