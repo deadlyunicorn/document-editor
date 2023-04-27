@@ -1,14 +1,16 @@
 import Menu from "@/app/components/buttons";
 import {  ReactNode, useContext, useEffect, useRef, useState } from "react";
-import { metaContext } from "../page";
-import { userInputArray } from "../page";
+
+import { colorContext } from "./colorContext";
+import { metaContext } from "./metaContext";
 
 const PagesSet=()=>{
   
 
   ///add a confirm box when deleting pages..
-  const {pagesToDisplay ,setPagesToDisplay,printPrep}=useContext(metaContext);
+  const {pagesToDisplay ,setPagesToDisplay,printPrep,setCharacterCount}=useContext(metaContext);
 
+  const {bg1,bg2,textColor,headingColor,headingColor2}=useContext(colorContext);
 
   const handleHeadingChange=(newValue:string,index:number)=>{
     setPagesToDisplay((oldArray)=>{
@@ -26,6 +28,7 @@ const PagesSet=()=>{
   const [selectedText,setSelectedText]=useState('');
   const [mousePos,setMousePos]=useState<number[]>([]);
 
+
   return(
     <div>
       {pagesToDisplay.map(({input,textarea},pageIndex:number)=>(
@@ -34,18 +37,21 @@ const PagesSet=()=>{
         {!printPrep&&pagesToDisplay.length>1
         &&<RemovePageButton pageIndex={pageIndex}/>}
 
-          <div className="A4 data-[print_check] " data-print_check={printPrep}>
+          <div 
+          className="A4 data-[print_check] " 
+          style={{color:textColor,background:`linear-gradient(${bg1} 60%,${bg2})`}}
+          data-print_check={printPrep}>
 
             <div className="gap-10 flex flex-col overflow-hidden items-center text-left">
-              <input className="h1" placeholder="Page Heading" onChange={(event)=>{handleHeadingChange(event.target.value,pageIndex)}} value={input}/>
+              <input className="h1" style={{color:headingColor,textShadow:`1px 2px ${headingColor2}`}} placeholder="Page Heading" onChange={(event)=>{handleHeadingChange(event.target.value,pageIndex)}} value={input}/>
               <DocumentInfo/>
               <MainContent 
                 setMousePos={setMousePos} 
                 setMenuShow={setMenuShow} 
-                setPagesToDisplay={setPagesToDisplay} 
                 setSelectedText={setSelectedText} 
                 textarea={textarea}
-                pageIndex={pageIndex} 
+                pageIndex={pageIndex}
+                setCharacterCount={setCharacterCount}
               />
             </div>
             <div>
@@ -62,6 +68,7 @@ const PagesSet=()=>{
                 setMenuShow={setMenuShow}
                 selectedText={selectedText}
               />
+              
           </div>
       </div>
 
@@ -73,12 +80,13 @@ const PagesSet=()=>{
 
 
 
-const MainContent = ({setMousePos,setMenuShow,setSelectedText,pageIndex,textarea}:{
+const MainContent = ({setMousePos,setMenuShow,setSelectedText,pageIndex,textarea,setCharacterCount}:{
   setMousePos:([]:number[])=>void,
   setMenuShow:(bool:boolean)=>void,
   setSelectedText: (text: string) => void,
   pageIndex:number,
-  textarea:ReactNode
+  textarea:ReactNode,
+  setCharacterCount:(num:number)=>void
 }) => {
 
   const {pagesToDisplay ,setPagesToDisplay}=useContext(metaContext);
@@ -108,11 +116,13 @@ const MainContent = ({setMousePos,setMenuShow,setSelectedText,pageIndex,textarea
     setSelectedText(window.getSelection()!.toString());
   }
 
-  const lastTextArea=useRef(null);
-  const [triggerStore,setTiggleStore]=useState(false);
+  const lastTextArea=useRef<any>(null);
 
   useEffect(()=>{
-    lastTextArea.current.innerHTML=textarea;
+    if(lastTextArea.current){
+      lastTextArea.current.innerHTML=textarea;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[pagesToDisplay.length])
 
   return(
@@ -127,7 +137,8 @@ const MainContent = ({setMousePos,setMenuShow,setSelectedText,pageIndex,textarea
                 //!!! onChange won't do
                 onInput={(event)=>{
                     handleTextAreaChange(event.currentTarget.innerHTML,pageIndex)
-                }}
+                    setCharacterCount(event.currentTarget.textContent!.length)
+                  }}
                 //onSelect={(event)=>{setSelectedText(event.target);alert(event.target.value)}}
                 onContextMenu={handleRightClick as any}
                 onMouseUp={setSelection}
