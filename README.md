@@ -7,7 +7,7 @@ On April of 2023 I had some assignments. I didn't even think about it, I straigh
 
 ### <u><center>Tasks</center></u>
 
-- [ ] Add an 'Add Page' button on the bottom menu bar.
-- [ ] Add color palletes for bg,text,headings etc. on the bottom menu bar.
-- [ ] Add right click menu. Click on parts of the text and edit them with some simple clicks.
+- [x] Add an 'Add Page' button on the bottom menu bar.
+- [x] Add color palletes for bg,text,headings etc. on the bottom menu bar.
+- [x] Add right click menu. Click on parts of the text and edit them with some simple clicks.
 - [ ] Add an 'Add Box' button. This will be a draggable input box that can be draged and placed anywhere on your document.(Maybe make it so that it has a 'PIN' button that pins it. The button dissappears when you enter print mode).
