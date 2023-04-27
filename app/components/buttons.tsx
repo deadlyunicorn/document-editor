@@ -33,16 +33,16 @@ const Menu = (
   },[color1])
   useEffect(()=>{
     localStorage.setItem("color2",color2);
-},[color2])
-useEffect(()=>{
-  localStorage.setItem("color3",color3);
-},[color3])
-useEffect(()=>{
-  localStorage.setItem("bgColor",bgColor);
-},[bgColor])
-useEffect(()=>{
-  localStorage.setItem("fontSize",fontSize);
-},[fontSize])
+  },[color2])
+  useEffect(()=>{
+    localStorage.setItem("color3",color3);
+  },[color3])
+  useEffect(()=>{
+    localStorage.setItem("bgColor",bgColor);
+  },[bgColor])
+  useEffect(()=>{
+    localStorage.setItem("fontSize",fontSize);
+  },[fontSize])
 
 
   
@@ -99,6 +99,9 @@ useEffect(()=>{
       <Button onClickEvent={()=>{document.execCommand("insertOrderedList")}}>
         Elist
       </Button>
+      <Button onClickEvent={()=>{document.execCommand("insertParagraph")}}>
+        Paragraph
+      </Button>
     </div>
 
     <div className="flex flex-col">
@@ -119,7 +122,7 @@ useEffect(()=>{
       
       <Button onClickEvent={()=>{
         const link=prompt("Enter Link:");
-        document.execCommand("createLink",false,link)}}>
+        document.execCommand("createLink",false,link||"www.google.com")}}>
         Link
       </Button>
       <Button onClickEvent={()=>{document.execCommand("unlink")}}>
@@ -135,7 +138,7 @@ useEffect(()=>{
       
       <Button onClickEvent={()=>{
         const size=prompt("Enter Size:");
-        setFontSize(size)}}>
+        setFontSize(size||"11px")}}>
           Size
       </Button>
       <Button onClickEvent={()=>{
@@ -144,7 +147,7 @@ useEffect(()=>{
       </Button>
       <Button onClickEvent={()=>{
         const color=prompt("Enter color:");
-        setBgColor(color)}}>
+        setBgColor(color||"black")}}>
           setBgCol
       </Button>
       <Button onClickEvent={()=>{
@@ -158,17 +161,17 @@ useEffect(()=>{
       
       <Button onClickEvent={()=>{
             const color=prompt("Enter color:");
-            setColor1(color)}}>
+            setColor1(color||"black")}}>
               setColor1
       </Button>
       <Button onClickEvent={()=>{
             const color=prompt("Enter color:");
-            setColor2(color)}}>
+            setColor2(color||"black")}}>
               setColor2
       </Button>
       <Button onClickEvent={()=>{
             const color=prompt("Enter color:");
-            setColor3(color)}}>
+            setColor3(color||"black")}}>
               setColor3
       </Button>
     </div>
