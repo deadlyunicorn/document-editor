@@ -14,7 +14,7 @@ export const metaContext = createContext<metaInterface>({
   printPrep:false,
   setPrintPrep:(printPrep:boolean)=>{},
   pagesToDisplay:[],
-  setPagesToDisplay:(PagesToDisplay:userInputArray)=>{},
+  setPagesToDisplay:(PagesToDisplay:any)=>{},
   characterCount:0,
   setCharacterCount:(num:number)=>{}
 
@@ -32,7 +32,7 @@ export interface metaInterface{
   printPrep:boolean,
   setPrintPrep:(printPrep:boolean)=>void,
   pagesToDisplay:userInputArray,
-  setPagesToDisplay:(PagesToDisplay:userInputArray)=>void,
+  setPagesToDisplay:(PagesToDisplay:any)=>void,
   characterCount:number,
   setCharacterCount:(num:number)=>void,
 }

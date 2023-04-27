@@ -3,6 +3,7 @@ import {  ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 import { colorContext } from "./colorContext";
 import { metaContext } from "./metaContext";
+import { userInputArray } from "../page";
 
 const PagesSet=()=>{
   
@@ -13,7 +14,7 @@ const PagesSet=()=>{
   const {bg1,bg2,textColor,headingColor,headingColor2}=useContext(colorContext);
 
   const handleHeadingChange=(newValue:string,index:number)=>{
-    setPagesToDisplay((oldArray)=>{
+    setPagesToDisplay((oldArray: userInputArray)=>{
       const newArray=[...oldArray];
       newArray[index]["input"]=newValue;
       return newArray;
@@ -93,7 +94,7 @@ const MainContent = ({setMousePos,setMenuShow,setSelectedText,pageIndex,textarea
 
 
   const handleTextAreaChange=(newValue:ReactNode,index:number)=>{
-    setPagesToDisplay(oldArray=>{
+    setPagesToDisplay((oldArray: userInputArray)=>{
       const newArray=[...oldArray];
       newArray[index]["textarea"]=newValue;
       return newArray;
