@@ -6,13 +6,17 @@ import { colorContext } from "./colorContext";
 import { metaContext } from "./metaContext";
 import { userInputArray } from "../page";
 
+import { customFonts } from "./customFonts";
+
+
+
 const PagesSet=()=>{
   
 
   ///add a confirm box when deleting pages..
   const {pagesToDisplay ,setPagesToDisplay,printPrep,setCharacterCount}=useContext(metaContext);
 
-  const {bg1,bg2,textColor,headingColor,headingColor2}=useContext(colorContext);
+  const {bg1,bg2,textColor,headingColor,headingColor2,headingFont,textFont}=useContext(colorContext);
 
   const handleHeadingChange=(newValue:string,index:number)=>{
     setPagesToDisplay((oldArray: userInputArray)=>{
@@ -25,16 +29,15 @@ const PagesSet=()=>{
 
   };
 
-
+  
   const [menuIsShown,setMenuShow]=useState(false);
   const [selectedText,setSelectedText]=useState('');
   const [mousePos,setMousePos]=useState<number[]>([]);
-
-
+  
   return(
     <div>
       {pagesToDisplay.map(({input,textarea},pageIndex:number)=>(
-        <div key={pageIndex}>
+        <div key={pageIndex} className={customFonts[textFont].className}>
 
         {!printPrep&&pagesToDisplay.length>1
         &&<RemovePageButton pageIndex={pageIndex}/>}
@@ -45,7 +48,11 @@ const PagesSet=()=>{
           data-print_check={printPrep}>
 
             <div className="gap-10 flex flex-col overflow-hidden items-center text-left">
-              <input className="h1" style={{color:headingColor,textShadow:`1px 2px ${headingColor2}`}} placeholder="Page Heading" onChange={(event)=>{handleHeadingChange(event.target.value,pageIndex)}} value={input}/>
+
+              <div className={customFonts[headingFont].className}>
+                <input className="h1" style={{color:headingColor,textShadow:`1px 1px ${headingColor2}`}} placeholder="Page Heading" onChange={(event)=>{handleHeadingChange(event.target.value,pageIndex)}} value={input}/>
+              </div>
+              
               <DocumentInfo/>
               <MainContent 
                 setMousePos={setMousePos} 
@@ -161,11 +168,12 @@ const DocumentInfo=()=>{
   return(
     <div className="flex justify-around gap-x-7">
 
-      <input placeholder="Made For" onChange={(event)=>setAssignedFor(event.target.value)} value={assignedFor}>
-      </input>
 
-      <input className="text-right" placeholder="Document Name" onChange={(event)=>setDocName(event.target.value)} value={docName}>
-      </input>
+        <input placeholder="Made For" onChange={(event)=>setAssignedFor(event.target.value)} value={assignedFor}>
+        </input>
+
+        <input className="text-right" placeholder="Document Name" onChange={(event)=>setDocName(event.target.value)} value={docName}>
+        </input>
 
     </div>
   )

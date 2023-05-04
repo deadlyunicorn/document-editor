@@ -9,9 +9,7 @@ main{
   margin: 0;
   padding: 0;
   
-  font-family: Arial, Helvetica, sans-serif;
   font-size: large;
-  color: #b22222;
 
   display: flex;
   flex-direction: column;
@@ -36,14 +34,12 @@ p{
 h2{
   color: rgb(114, 67, 255);
   font-weight: 400;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .h1{
   text-align: center;
   font-size: xx-large;
-  color: #1bbd1b;
-  text-shadow: 1px 2px #5dec5d;
+  text-shadow: 1px 2px;
 }
 
 ul li {
@@ -83,7 +79,6 @@ label{
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       height: 850px;
       line-height: 1.2;
       border: solid black 1px;
@@ -108,7 +103,7 @@ a:hover{
 }
 
 .A4{
-  background: linear-gradient(antiquewhite 60%,#ffe4c4);
+  background: linear-gradient(#faebd7 60%,#ffe4c4);
   border: solid rgba(0, 0, 0, 0.356);
   overflow: hidden;
   /*  */
@@ -149,6 +144,45 @@ input[type=checkbox]{
   margin-left: 10px;
 }
 
+input[type=color]{
+  width: 24px;
+  margin-left: 2px;
+  transform: translateY(-3px);
+}
+
 input:focus{
   border-bottom: solid black 1px;
+}
+
+.tooltip{
+  position: relative;
+  text-decoration: dotted underline;
+  
+}
+
+.tooltip:hover .tooltip-text{
+  visibility: visible;
+}
+
+.tooltip-text{
+  visibility: hidden;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 1;
+  position: absolute;
+  bottom: 30px;
+  left: -75px;
+  background-color: white;
+  width: 200px;
+
+}
+
+.tooltip .tooltip-text::after{
+  position: absolute;
+  content: " ";
+  bottom: -20px;
+  border: solid;
+  border-color: white transparent transparent transparent;
+  width: 5px;
+  border-width: 10px;
 }
