@@ -72,6 +72,10 @@ export default function Page() {
   const [headingColor2,setHeadingColor2]=useState(localStorage.getItem("headingColor2")||"#5dec5d");
   const [pageBg,setPageBg]=useState(localStorage.getItem("pageBg")||"#acd3ac")
 
+  const [textFont,setTextFont]=useState(localStorage.getItem("textFont")||"Roboto")
+  const [headingFont,setHeadingFont]=useState(localStorage.getItem("headingFont")||"Roboto")
+
+
   const colorValue ={
     bg1:bg1,
     setBg1:setBg1,
@@ -84,7 +88,11 @@ export default function Page() {
     headingColor2:headingColor2,
     setHeadingColor2:setHeadingColor2,
     pageBg:pageBg,
-    setPageBg:setPageBg
+    setPageBg:setPageBg,
+    textFont:textFont,
+    setTextFont:setTextFont,
+    headingFont:headingFont,
+    setHeadingFont:setHeadingFont,
   }
 
 
