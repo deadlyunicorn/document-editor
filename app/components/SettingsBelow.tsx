@@ -23,7 +23,7 @@ const OptionMenu=()=>{
   const {pagesToDisplay: pagesToDisplay,setPagesToDisplay}=useContext(metaContext);
 
   
-  const [pallete,setPallete]=useState("#00000");
+  const [palette,setPalette]=useState("#00000");
 
   const fontList=Object.keys(customFonts);
 
@@ -55,7 +55,7 @@ const OptionMenu=()=>{
 
           <div className="w-fit flex">
             <div className="tooltip">
-              <label>Pallete </label>
+              <label>Palette </label>
               <span className="tooltip-text">
                 You can use this tool <br/>
                 to get the hex value <br/>
@@ -64,8 +64,8 @@ const OptionMenu=()=>{
                 based on your needs. <br/>
               </span>
             </div>
-            <span style={{color:pallete}}>&nbsp;{pallete}</span>
-            <input id="pallete" type="color" value={pallete} onChange={(event)=>{setPallete(event.target.value)}}/>
+            <span style={{color:palette}}>&nbsp;{palette}</span>
+            <input id="palette" type="color" value={palette} onChange={(event)=>{setPalette(event.target.value)}}/>
           </div>
           
           
