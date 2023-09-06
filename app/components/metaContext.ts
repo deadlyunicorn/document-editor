@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext } from 'react';
-import { userInputArray } from '../page';
+import { userInputArray } from './LocalStorage';
 
 
 export const metaContext = createContext<metaInterface>({

@@ -4,9 +4,9 @@ import {  ReactNode, useContext, useEffect, useRef, useState } from "react";
 
 import { colorContext } from "./colorContext";
 import { metaContext } from "./metaContext";
-import { userInputArray } from "../page";
 
 import { customFonts } from "./customFonts";
+import { userInputArray } from "./LocalStorage";
 
 
 
