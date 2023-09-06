@@ -23,26 +23,26 @@ const Menu = (
     document.execCommand("insertHTML",false,`<ol><li>${selectedText}</li></ol><br/>`)
     }
 
-  const [color1,setColor1]=useState(localStorage.getItem("color1")||"");
-  const [color2,setColor2]=useState(localStorage.getItem("color2")||"");
-  const [color3,setColor3]=useState(localStorage.getItem("color3")||"");
-  const [bgColor,setBgColor]=useState(localStorage.getItem("bgColor")||"");
-  const [fontSize,setFontSize]=useState(localStorage.getItem("fontSize")||"");
+  const [color1,setColor1]=useState(localStorage.color1||"");
+  const [color2,setColor2]=useState(localStorage.color2||"");
+  const [color3,setColor3]=useState(localStorage.color3||"");
+  const [bgColor,setBgColor]=useState(localStorage.bgColor||"");
+  const [fontSize,setFontSize]=useState(localStorage.fontSize||"");
 
   useEffect(()=>{
-      localStorage.setItem("color1",color1);
+      localStorage.color1=color1;
   },[color1])
   useEffect(()=>{
-    localStorage.setItem("color2",color2);
+    localStorage.color2=color2;
   },[color2])
   useEffect(()=>{
-    localStorage.setItem("color3",color3);
+    localStorage.color3=color3;
   },[color3])
   useEffect(()=>{
-    localStorage.setItem("bgColor",bgColor);
+    localStorage.bgColor=bgColor;
   },[bgColor])
   useEffect(()=>{
-    localStorage.setItem("fontSize",fontSize);
+    localStorage.fontSize=fontSize;
   },[fontSize])
 
 

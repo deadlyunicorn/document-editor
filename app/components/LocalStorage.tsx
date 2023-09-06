@@ -63,15 +63,15 @@ const LocalStorageComponent = () => {
 
 
 
-  const [bg1,setBg1]=useState(localStorage?.getItem("bg1")||"antiquewhite")
-  const [bg2,setBg2]=useState(localStorage?.getItem("bg2")||"#ffe4c4")
-  const [textColor,setTextColor]=useState(localStorage?.getItem("textColor")||"firebrick");
-  const [headingColor,setHeadingColor]=useState(localStorage?.getItem("headingColor")||"#1bbd1b");
-  const [headingColor2,setHeadingColor2]=useState(localStorage?.getItem("headingColor2")||"#5dec5d");
-  const [pageBg,setPageBg]=useState(localStorage?.getItem("pageBg")||"#acd3ac")
+  const [bg1,setBg1]=useState(localStorage.bg1||"antiquewhite")
+  const [bg2,setBg2]=useState(localStorage.bg2||"#ffe4c4")
+  const [textColor,setTextColor]=useState(localStorage.textColor||"firebrick");
+  const [headingColor,setHeadingColor]=useState(localStorage.headingColor||"#1bbd1b");
+  const [headingColor2,setHeadingColor2]=useState(localStorage.headingColor2||"#5dec5d");
+  const [pageBg,setPageBg]=useState(localStorage.pageBg||"#acd3ac")
 
-  const [textFont,setTextFont]=useState(localStorage?.getItem("textFont")||"Roboto")
-  const [headingFont,setHeadingFont]=useState(localStorage?.getItem("headingFont")||"Roboto")
+  const [textFont,setTextFont]=useState(localStorage.textFont||"Roboto")
+  const [headingFont,setHeadingFont]=useState(localStorage.headingFont||"Roboto")
 
 
   const colorValue ={
@@ -95,22 +95,22 @@ const LocalStorageComponent = () => {
 
 
   useEffect(()=>{
-      localStorage?.setItem("bg1",bg1);
+      localStorage.bg1=bg1;
   },[bg1])
   useEffect(()=>{
-    localStorage?.setItem("bg2",bg2);
+    localStorage.bg2=bg2;
   },[bg2])
   useEffect(()=>{
-    localStorage?.setItem("textColor",textColor);
+    localStorage.textColor=textColor;
   },[textColor])
   useEffect(()=>{
-    localStorage?.setItem("headingColor",headingColor);
+    localStorage.headingColor=headingColor;
   },[headingColor])
   useEffect(()=>{
-    localStorage?.setItem("headingColor2",headingColor2);
+    localStorage.headingColor2=headingColor2;
   },[headingColor2])
   useEffect(()=>{
-    localStorage?.setItem("pageBg",pageBg);
+    localStorage.pageBg=pageBg;
   },[pageBg])
 
 

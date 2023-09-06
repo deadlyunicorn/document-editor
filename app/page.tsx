@@ -10,8 +10,7 @@ export default function Page() {
   return (
 
     <main>
-      hello world
-      {/* <LocalStorageComponent/> */}
+      <LocalStorageComponent/>
     </main>
   )
 }
