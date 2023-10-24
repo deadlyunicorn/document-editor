@@ -151,20 +151,6 @@ const Menu = (
     
  
 
-    <div className="flex flex-col">
-
-      
-      
-          
-      <div className="flex items-center justify-center">
-        
-          
-
-
-      </div>
-      
-      
-    </div>
 
     <div className="grid grid-rows-3">
 
