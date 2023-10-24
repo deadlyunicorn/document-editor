@@ -23,7 +23,7 @@ const OptionMenu=()=>{
   const {pagesToDisplay: pagesToDisplay,setPagesToDisplay}=useContext(metaContext);
 
   
-  const [palette,setPalette]=useState("#00000");
+  const [palette,setPalette]=useState("#000000");
 
   const fontList=Object.keys(customFonts);
 
@@ -94,7 +94,7 @@ const OptionMenu=()=>{
       <div className="flex flex-col items-start w-48">
         <div className="flex">
           Page Background
-          <input id="pageBg" type="color" value={pageBg} onChange={(event)=>{setPageBg(event.target.value)}}/>
+          <input id="pageBg" type="color" value={pageBg} onChange={(event)=>{ setPageBg(event.target.value)}}/>
 
         </div>
         <div className="flex">

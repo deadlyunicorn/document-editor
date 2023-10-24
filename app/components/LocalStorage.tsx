@@ -63,9 +63,9 @@ const LocalStorageComponent = () => {
 
 
 
-  const [bg1,setBg1]=useState("antiquewhite")
+  const [bg1,setBg1]=useState("#faebd7")
   const [bg2,setBg2]=useState("#ffe4c4")
-  const [textColor,setTextColor]=useState("firebrick");
+  const [textColor,setTextColor]=useState("#b22222");
   const [headingColor,setHeadingColor]=useState("#1bbd1b");
   const [headingColor2,setHeadingColor2]=useState("#5dec5d");
   const [pageBg,setPageBg]=useState("#acd3ac")
@@ -94,9 +94,9 @@ const LocalStorageComponent = () => {
   }
 
   useEffect( ()=>{
-    setBg1(localStorage.bg1||"antiquewhite");
+    setBg1(localStorage.bg1||"#faebd7");
     setBg2(localStorage.bg2||"#ffe4c4");
-    setTextColor(localStorage.textColor||"firebrick");
+    setTextColor(localStorage.textColor||"#b22222");
     setHeadingColor(localStorage.headingColor||"#1bbd1b");
     setHeadingColor2(localStorage.headingColor2||"#5dec5d");
     setPageBg(localStorage.pageBg||"#acd3ac");
@@ -127,24 +127,26 @@ const LocalStorageComponent = () => {
 
   return (
 
-    <section
-      style={{backgroundColor:pageBg}}
-      className="data-[color_default=true]:bg-[#ffe4c4]" data-color_default={printPrep}> 
+    <main
+    style={{backgroundColor:pageBg}}>
+      <section
+        className="data-[color_default=true]:bg-[#ffe4c4]" data-color_default={printPrep}> 
 
-      <metaContext.Provider value={metaValue}>
-        
-        <colorContext.Provider value={colorValue}>
+        <metaContext.Provider value={metaValue}>
           
-              {(characterCount)>1500&&!printPrep&&
-          <Alert/>}
+          <colorContext.Provider value={colorValue}>
+            
+                {(characterCount)>1500&&!printPrep&&
+            <Alert/>}
 
-          <PagesSet/>
-          <OptionMenu/>
-        </colorContext.Provider>
-      </metaContext.Provider> 
+            <PagesSet/>
+            <OptionMenu/>
+          </colorContext.Provider>
+        </metaContext.Provider> 
 
 
-    </section>
+      </section>
+    </main>
   )
 
 }

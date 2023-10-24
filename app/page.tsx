@@ -9,9 +9,9 @@ export default function Page() {
 
   return (
 
-    <main>
+    <div>
       <LocalStorageComponent/>
-    </main>
+    </div>
   )
 }
 

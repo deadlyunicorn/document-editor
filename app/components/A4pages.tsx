@@ -70,7 +70,7 @@ const PagesSet=()=>{
 
 
           </div>
-          <div className="data-[menuIsShown=true]:inline hidden" data-menuIsShown={menuIsShown}>
+          <div className="data-[menu-is-shown=true]:inline hidden" data-menu-is-shown={menuIsShown}>
               <Menu 
                 posX={mousePos[0]} 
                 posY={mousePos[1]} 
@@ -169,11 +169,10 @@ const DocumentInfo=()=>{
     <div className="flex justify-around gap-x-7">
 
 
-        <input placeholder="Made For" onChange={(event)=>setAssignedFor(event.target.value)} value={assignedFor}>
-        </input>
+        <input 
+          placeholder="Made For" onChange={(event)=>setAssignedFor(event.target.value)} value={assignedFor}/>
 
-        <input className="text-right" placeholder="Document Name" onChange={(event)=>setDocName(event.target.value)} value={docName}>
-        </input>
+        <input className="text-right" placeholder="Document Name" onChange={(event)=>setDocName(event.target.value)} value={docName}/>
 
     </div>
   )
