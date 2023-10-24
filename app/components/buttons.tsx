@@ -23,11 +23,19 @@ const Menu = (
     document.execCommand("insertHTML",false,`<ol><li>${selectedText}</li></ol><br/>`)
     }
 
-  const [color1,setColor1]=useState(localStorage.color1||"");
-  const [color2,setColor2]=useState(localStorage.color2||"");
-  const [color3,setColor3]=useState(localStorage.color3||"");
-  const [bgColor,setBgColor]=useState(localStorage.bgColor||"");
-  const [fontSize,setFontSize]=useState(localStorage.fontSize||"");
+  const [color1,setColor1]=useState("");
+  const [color2,setColor2]=useState("");
+  const [color3,setColor3]=useState("");
+  const [bgColor,setBgColor]=useState("");
+  const [fontSize,setFontSize]=useState("");
+
+  useEffect( ()=> {
+    setColor1(localStorage.color1||"");
+    setColor2(localStorage.color2||"");
+    setColor3(localStorage.color3||"");
+    setBgColor(localStorage.bgColor||"");
+    setFontSize(localStorage.fontSize||"");
+  },[])
 
   useEffect(()=>{
       localStorage.color1=color1;

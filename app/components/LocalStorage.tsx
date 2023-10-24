@@ -63,15 +63,15 @@ const LocalStorageComponent = () => {
 
 
 
-  const [bg1,setBg1]=useState(localStorage.bg1||"antiquewhite")
-  const [bg2,setBg2]=useState(localStorage.bg2||"#ffe4c4")
-  const [textColor,setTextColor]=useState(localStorage.textColor||"firebrick");
-  const [headingColor,setHeadingColor]=useState(localStorage.headingColor||"#1bbd1b");
-  const [headingColor2,setHeadingColor2]=useState(localStorage.headingColor2||"#5dec5d");
-  const [pageBg,setPageBg]=useState(localStorage.pageBg||"#acd3ac")
+  const [bg1,setBg1]=useState("antiquewhite")
+  const [bg2,setBg2]=useState("#ffe4c4")
+  const [textColor,setTextColor]=useState("firebrick");
+  const [headingColor,setHeadingColor]=useState("#1bbd1b");
+  const [headingColor2,setHeadingColor2]=useState("#5dec5d");
+  const [pageBg,setPageBg]=useState("#acd3ac")
 
-  const [textFont,setTextFont]=useState(localStorage.textFont||"Roboto")
-  const [headingFont,setHeadingFont]=useState(localStorage.headingFont||"Roboto")
+  const [textFont,setTextFont]=useState("Roboto")
+  const [headingFont,setHeadingFont]=useState("Roboto")
 
 
   const colorValue ={
@@ -93,6 +93,16 @@ const LocalStorageComponent = () => {
     setHeadingFont:setHeadingFont,
   }
 
+  useEffect( ()=>{
+    setBg1(localStorage.bg1||"antiquewhite");
+    setBg2(localStorage.bg2||"#ffe4c4");
+    setTextColor(localStorage.textColor||"firebrick");
+    setHeadingColor(localStorage.headingColor||"#1bbd1b");
+    setHeadingColor2(localStorage.headingColor2||"#5dec5d");
+    setPageBg(localStorage.pageBg||"#acd3ac");
+    setTextFont( localStorage.textFont||"Roboto" );
+    setHeadingFont ( localStorage.headingFont||"Roboto") ;
+  },[])
 
   useEffect(()=>{
       localStorage.bg1=bg1;
@@ -122,6 +132,7 @@ const LocalStorageComponent = () => {
       className="data-[color_default=true]:bg-[#ffe4c4]" data-color_default={printPrep}> 
 
       <metaContext.Provider value={metaValue}>
+        
         <colorContext.Provider value={colorValue}>
           
               {(characterCount)>1500&&!printPrep&&
